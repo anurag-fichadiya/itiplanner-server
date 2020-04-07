@@ -22,6 +22,8 @@ pathlib2==2.3.4
 pep8==1.7.1
 pickleshare==0.7.5
 py==1.8.0
+requests==2.23.0
+requests-toolbelt==0.9.1
 scikit-learn==0.21.2
 scipy==1.2.1
 SQLAlchemy==1.3.5
@@ -43,8 +45,3 @@ pyasn1-modules>=0.0.5
 protobuf!=3.0.0.b2.post1,>=3.0.0b2
 googleapis-common-protos==1.51.0
 jws>=0.1.3
-urllib3!=1.25.0,!=1.25.1,<1.26,>=1.21.1
-idna<3,>=2.5
-chardet<4,>=3.0.21
-certifi>=2017.4.17
-setuptools==46.1.3
