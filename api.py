@@ -81,10 +81,18 @@ class iti_all(Resource):
         df = model.get_iti_all()
         print("this is df from api.py for all", df);
         return df.to_dict('index') #IMP to write this index
+        
+class user_history(Resource):
+    def get(self, uid):
+        df = model.user_history(uid)
+        print("this is df from api.py for all", df);
+        return df.to_dict('index') #IMP to write this index
 
 api.add_resource(iti_all, '/itinerary') # Route_1
 api.add_resource(iti_list, '/user/<uid>') # Route_1
 api.add_resource(iti_details , '/itinerary/<iti_id>') # Route_3
+api.add_resource(user_history , '/history/<uid>') # Route_3
+
 
 
 if __name__ == '__main__':

@@ -194,6 +194,7 @@ class pred_model:
         #ans=ans.sort_values(by=['bag_y','average rating'],ascending=[False,False])
         h=self.H[self.H.userid==userid]       #Users history
         ans=ans.loc[~ans.id.isin(h.Itineraryid)]  #exclude Itineraries from history
+        ans=ans.sort_values(by=['ratings'], ascending=False)
         s = pd.Series(np.arange(len(ans.index)))
         ans = ans[['city', 'id','daysCount', 'placeModels', 'ratings', 'totalCost']].set_index([s]) #ans ready
         ans = self.format_iti(ans)
@@ -225,3 +226,23 @@ class pred_model:
         ans = self.format_iti(ans)
         print("this returned from all ", ans)
         return ans;
+    def user_history(self, uid):
+        print("History tabel", self.H);
+        ans = [ ]
+        for key, val in self.H.iterrows():
+            if(val['userid'] == uid):
+                ans.append(val['Itineraryid'])
+        fans = pd.DataFrame()
+        print("ans ", ans)
+        for i in ans:
+            for key, value in self.I.iterrows():
+                if(value['id'] == i):
+                    fans = fans.append(value)
+        if len(ans) == 0:
+            return fans
+        print("fans", fans)
+        s = pd.Series(np.arange(len(fans.index)))
+        fans = fans.set_index([s])
+        fans = self.format_iti(fans)
+        print("This will be returned from user history table", fans)
+        return fans
