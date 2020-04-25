@@ -15,6 +15,9 @@ import pyrebase
 import pandas as pd
 import numpy as np
 from pandas.io.json import json_normalize
+#shortestpath imports
+from math import radians, cos, sin, asin, sqrt
+
 #class
 class pred_model:
 #constructor
@@ -246,3 +249,92 @@ class pred_model:
         fans = self.format_iti(fans)
         print("This will be returned from user history table", fans)
         return fans
+
+    def distance(self, lat1,lon1,lat2,lon2):
+        lat1 = float(lat1) 
+        lat2 = float(lat2) 
+        lon1 = float(lon1) 
+        lon2 = float(lon2)
+        lat1 = radians(lat1) 
+        lat2 = radians(lat2) 
+        lon1 = radians(lon1) 
+        lon2 = radians(lon2)
+        dlon = lon2 - lon1  
+        dlat = lat2 - lat1 
+        a = sin(dlat / 2)**2 + cos(lat1) * cos(lat2) * sin(dlon / 2)**2
+        c = 2 * asin(sqrt(a))  
+        r = 6371
+        return(c * r)
+
+    def shortest_path(self, arr):   #arr[0]=[id,lat,lon]
+        n=len(arr)
+        curr=arr[0]
+        nxt=arr[0]
+        ans=[None]*n
+        ans[0]=curr[0]
+        temp=arr
+        temp.remove(list(curr))
+        for i in range(1,n):
+            dis=10**10;
+            for place in temp:
+                tdis=self.distance(curr[1],curr[2],place[1],place[2])
+                if(dis>tdis): 
+                    dis=tdis
+                    nxt=place
+            ans[i]=nxt[0]
+            curr=nxt
+            temp.remove(list(nxt))
+        return ans
+    
+    def get_shortest_path(self, pid):
+        a = [ ]
+        c = 0
+        s = ''
+        la = 0
+        lo = 0
+        fla = 0
+        flo = 0
+        vla = 0.1
+        vlo = 0.1
+        for i in pid:
+            if i == '&':
+                c += 1
+                c %= 3
+                if c == 0:
+                    a.append([s, la, lo])
+                    s = ''
+                    la = 0
+                    lo = 0
+                    fla = 0
+                    flo = 0
+                    vla = 0.1
+                    vlo = 0.1
+            else:
+                if c == 0:#id
+                    s = s + str(i)
+                elif c == 1:#lat
+                    if i == '-':
+                        la = -la
+                    elif i == '.':
+                        fla = 1
+                    else:
+                        if fla == 0:
+                            la = la*10 + int(i)
+                        else:
+                            la = la + int(i) * vla
+                            vla /= 10
+                else:
+                    if i == '-':
+                        lo = -lo
+                    elif i == '.':
+                        flo = 1
+                    else:
+                        if flo == 0:
+                            lo = lo*10 + int(i)
+                        else:
+                            lo = lo + int(i) * vlo
+                            vlo /= 10
+        ans = self.shortest_path(a)
+        ans = pd.Series(ans)
+        print("Final ans - sorted ids", ans )
+        return ans

@@ -87,12 +87,18 @@ class user_history(Resource):
         df = model.user_history(uid)
         print("this is df from api.py for all", df);
         return df.to_dict('index') #IMP to write this index
+        
+class path(Resource):
+    def get(self, pid):
+        df = model.get_shortest_path(pid)
+        print("this is df from api.py for sorted path indices ", df);
+        return df.to_dict() #IMP not to write this index
 
 api.add_resource(iti_all, '/itinerary') # Route_1
 api.add_resource(iti_list, '/user/<uid>') # Route_1
 api.add_resource(iti_details , '/itinerary/<iti_id>') # Route_3
 api.add_resource(user_history , '/history/<uid>') # Route_3
-
+api.add_resource(path, '/path/<pid>')
 
 
 if __name__ == '__main__':
