@@ -6,7 +6,7 @@ Flask-Jsonpify==1.5.0
 Flask-RESTful==0.3.8
 Flask-SQLAlchemy==2.4.1
 itsdangerous==1.1.0
-Jinja2==2.10.1
+Jinja2==2.11.3
 joblib==0.13.2
 json5==0.8.4
 JsonJ==0.1.6
